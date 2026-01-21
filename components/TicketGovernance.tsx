@@ -16,11 +16,11 @@ export function TicketGovernance({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-sm">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-semibold text-slate-900">Governance</h3>
-            <p className="text-sm text-slate-500">
+            <h3 className="text-lg font-semibold text-slate-100">Governance</h3>
+            <p className="text-sm text-slate-400">
               Jira is read-only by default. Writes require approval.
             </p>
           </div>

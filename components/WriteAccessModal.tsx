@@ -78,21 +78,21 @@ export function WriteAccessModal({
   return (
     <div>
       <button
-        className="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+        className="rounded-full border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-100 hover:bg-slate-800"
         onClick={() => setOpen(true)}
       >
         Request write access
       </button>
 
       {open ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-6">
-          <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-6">
+          <div className="w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
                   Jira write access
                 </p>
-                <h2 className="mt-1 text-xl font-semibold text-slate-900">
+                <h2 className="mt-1 text-xl font-semibold text-slate-100">
                   Request temporary write access
                 </h2>
               </div>
@@ -100,11 +100,11 @@ export function WriteAccessModal({
             </div>
 
             <form className="mt-5 space-y-4" onSubmit={handleSubmit}>
-              <label className="block text-sm font-medium text-slate-700">
+              <label className="block text-sm font-medium text-slate-200">
                 Reason
                 <textarea
                   required
-                  className="mt-2 w-full rounded-xl border border-slate-200 p-3 text-sm text-slate-700"
+                  className="mt-2 w-full rounded-xl border border-slate-800 bg-slate-950 p-3 text-sm text-slate-100 placeholder:text-slate-600"
                   rows={3}
                   value={form.reason}
                   onChange={(event) =>
@@ -112,11 +112,11 @@ export function WriteAccessModal({
                   }
                 />
               </label>
-              <label className="block text-sm font-medium text-slate-700">
+              <label className="block text-sm font-medium text-slate-200">
                 Scope
                 <input
                   required
-                  className="mt-2 w-full rounded-xl border border-slate-200 p-3 text-sm text-slate-700"
+                  className="mt-2 w-full rounded-xl border border-slate-800 bg-slate-950 p-3 text-sm text-slate-100 placeholder:text-slate-600"
                   value={form.scope}
                   onChange={(event) =>
                     setForm((prev) => ({ ...prev, scope: event.target.value }))
@@ -124,11 +124,11 @@ export function WriteAccessModal({
                   placeholder="e.g., Update ticket fields only"
                 />
               </label>
-              <label className="block text-sm font-medium text-slate-700">
+              <label className="block text-sm font-medium text-slate-200">
                 Approval policy
                 <input
                   required
-                  className="mt-2 w-full rounded-xl border border-slate-200 p-3 text-sm text-slate-700"
+                  className="mt-2 w-full rounded-xl border border-slate-800 bg-slate-950 p-3 text-sm text-slate-100 placeholder:text-slate-600"
                   value={form.approvalPolicy}
                   onChange={(event) =>
                     setForm((prev) => ({ ...prev, approvalPolicy: event.target.value }))
@@ -136,21 +136,21 @@ export function WriteAccessModal({
                   placeholder="e.g., Team lead + security reviewer"
                 />
               </label>
-              <label className="block text-sm font-medium text-slate-700">
+              <label className="block text-sm font-medium text-slate-200">
                 Notes (optional)
                 <input
-                  className="mt-2 w-full rounded-xl border border-slate-200 p-3 text-sm text-slate-700"
+                  className="mt-2 w-full rounded-xl border border-slate-800 bg-slate-950 p-3 text-sm text-slate-100 placeholder:text-slate-600"
                   value={form.notes}
                   onChange={(event) =>
                     setForm((prev) => ({ ...prev, notes: event.target.value }))
                   }
                 />
               </label>
-              <label className="flex items-start gap-2 text-sm text-slate-600">
+              <label className="flex items-start gap-2 text-sm text-slate-300">
                 <input
                   type="checkbox"
                   required
-                  className="mt-1"
+                  className="mt-1 rounded border-slate-700 bg-slate-950"
                   checked={form.confirm}
                   onChange={(event) =>
                     setForm((prev) => ({ ...prev, confirm: event.target.checked }))
@@ -160,13 +160,13 @@ export function WriteAccessModal({
               </label>
 
               {error ? (
-                <p className="text-sm text-red-600">{error}</p>
+                <p className="text-sm text-red-200">{error}</p>
               ) : null}
 
               <div className="flex items-center justify-end gap-3">
                 <button
                   type="button"
-                  className="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-900"
+                  className="rounded-full px-4 py-2 text-sm font-semibold text-slate-300 hover:text-slate-100"
                   onClick={() => {
                     resetForm();
                     setOpen(false);
@@ -177,7 +177,7 @@ export function WriteAccessModal({
                 <button
                   type="submit"
                   disabled={loading}
-                  className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
+                  className="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-white disabled:cursor-not-allowed disabled:bg-slate-500"
                 >
                   {loading ? "Submitting..." : "Submit request"}
                 </button>

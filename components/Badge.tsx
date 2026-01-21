@@ -8,9 +8,9 @@ export function Badge({
   tone?: "slate" | "amber" | "emerald";
 }) {
   const styles = {
-    slate: "bg-slate-100 text-slate-700",
-    amber: "bg-amber-100 text-amber-700",
-    emerald: "bg-emerald-100 text-emerald-700"
+    slate: "bg-slate-800 text-slate-200",
+    amber: "bg-amber-500/20 text-amber-200",
+    emerald: "bg-emerald-500/20 text-emerald-200"
   };
 
   return (

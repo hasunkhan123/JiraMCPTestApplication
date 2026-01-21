@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
 import { Header } from "../components/Header";
+import { Breadcrumbs } from "../components/Breadcrumbs";
 
 export const metadata: Metadata = {
   title: "Codex Jira Companion",
@@ -19,6 +20,7 @@ export default function RootLayout({
         <Providers>
           <div className="min-h-screen">
             <Header />
+            <Breadcrumbs />
             <main className="mx-auto max-w-5xl px-6 py-8">{children}</main>
           </div>
         </Providers>

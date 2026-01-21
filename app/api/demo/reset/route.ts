@@ -1,0 +1,22 @@
+import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../../../lib/auth";
+import { prisma } from "../../../../lib/prisma";
+
+export async function POST() {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const [codexRuns, writeAccessRequests] = await prisma.$transaction([
+    prisma.codexRun.deleteMany({ where: { userId: session.user.id } }),
+    prisma.writeAccessRequest.deleteMany({ where: { userId: session.user.id } })
+  ]);
+
+  return NextResponse.json({
+    codexRunsCleared: codexRuns.count,
+    writeAccessRequestsCleared: writeAccessRequests.count
+  });
+}

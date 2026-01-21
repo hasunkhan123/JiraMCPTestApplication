@@ -67,29 +67,29 @@ export default async function TicketDetailPage({
 
   return (
     <div className="grid gap-8">
-      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <section className="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-sm">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-900"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-300 hover:text-white"
         >
           <span aria-hidden="true">←</span>
           Back to tickets
         </Link>
         <div className="mt-4 flex items-start justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
               {ticket.key}
             </p>
-            <h1 className="mt-2 text-2xl font-semibold text-slate-900">
+            <h1 className="mt-2 text-2xl font-semibold text-slate-100">
               {ticket.title}
             </h1>
-            <p className="mt-3 text-sm text-slate-600">
+            <p className="mt-3 text-sm text-slate-300">
               {ticket.description}
             </p>
           </div>
           <div className="text-right">
             <Badge tone="emerald">{ticket.status}</Badge>
-            <p className="mt-2 text-xs text-slate-500">{ticket.priority}</p>
+            <p className="mt-2 text-xs text-slate-400">{ticket.priority}</p>
           </div>
         </div>
       </section>
