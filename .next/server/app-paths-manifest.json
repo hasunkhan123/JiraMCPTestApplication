@@ -1,6 +1,6 @@
 {
-  "/api/write-access-requests/route": "app/api/write-access-requests/route.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
   "/page": "app/page.js",
-  "/tickets/[key]/page": "app/tickets/[key]/page.js",
-  "/api/codex/generate/route": "app/api/codex/generate/route.js"
+  "/api/codex/generate/route": "app/api/codex/generate/route.js",
+  "/tickets/[key]/page": "app/tickets/[key]/page.js"
 }
