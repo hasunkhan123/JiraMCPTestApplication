@@ -16,12 +16,16 @@ export function RequestsList({
   requests,
   approvingId,
   approveError,
-  onApprove
+  onApprove,
+  onRevoke,
+  revokingId
 }: {
   requests: RequestItem[];
   approvingId?: string | null;
   approveError?: string | null;
   onApprove?: (requestId: string) => void;
+  onRevoke?: (requestId: string) => void;
+  revokingId?: string | null;
 }) {
   return (
     <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-sm">
@@ -65,6 +69,16 @@ export function RequestsList({
                       type="button"
                     >
                       {approvingId === request.id ? "Approving..." : "Approve"}
+                    </button>
+                  ) : null}
+                  {request.status === "approved" && onRevoke ? (
+                    <button
+                      className="rounded-full border border-slate-700 px-3 py-1 text-xs font-semibold text-slate-100 hover:bg-slate-800 disabled:cursor-not-allowed disabled:text-slate-500"
+                      onClick={() => onRevoke(request.id)}
+                      disabled={revokingId === request.id}
+                      type="button"
+                    >
+                      {revokingId === request.id ? "Revoking..." : "Revoke"}
                     </button>
                   ) : null}
                 </div>

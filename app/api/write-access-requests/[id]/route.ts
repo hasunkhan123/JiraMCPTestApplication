@@ -4,7 +4,7 @@ import { authOptions } from "../../../../lib/auth";
 import { prisma } from "../../../../lib/prisma";
 
 export async function PATCH(
-  _request: Request,
+  request: Request,
   { params }: { params: { id: string } }
 ) {
   const session = await getServerSession(authOptions);
@@ -21,9 +21,19 @@ export async function PATCH(
     return NextResponse.json({ error: "Request not found" }, { status: 404 });
   }
 
+  const body = (await request.json().catch(() => ({}))) as {
+    status?: "approved" | "revoked";
+  };
+
+  const nextStatus = body.status === "revoked" ? "revoked" : "approved";
+
+  if (nextStatus === "revoked" && requestItem.userId !== session.user.id) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
   const updated = await prisma.writeAccessRequest.update({
     where: { id: params.id },
-    data: { status: "approved" }
+    data: { status: nextStatus }
   });
 
   return NextResponse.json({

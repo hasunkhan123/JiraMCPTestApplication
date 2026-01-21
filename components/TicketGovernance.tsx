@@ -7,14 +7,18 @@ import { WriteAccessModal } from "./WriteAccessModal";
 
 export function TicketGovernance({
   ticketKey,
-  initialRequests
+  initialRequests,
+  hasWriteAccess
 }: {
   ticketKey: string;
   initialRequests: RequestItem[];
+  hasWriteAccess: boolean;
 }) {
   const [requests, setRequests] = useState<RequestItem[]>(initialRequests);
+  const [writeAccess, setWriteAccess] = useState(hasWriteAccess);
   const [approvingId, setApprovingId] = useState<string | null>(null);
   const [approveError, setApproveError] = useState<string | null>(null);
+  const [revokingId, setRevokingId] = useState<string | null>(null);
 
   const handleApprove = async (requestId: string) => {
     setApprovingId(requestId);
@@ -34,12 +38,43 @@ export function TicketGovernance({
           request.id === updated.id ? { ...request, status: updated.status } : request
         )
       );
+      setWriteAccess(true);
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Approval failed.";
       setApproveError(message);
     } finally {
       setApprovingId(null);
+    }
+  };
+
+  const handleRevoke = async (requestId: string) => {
+    setRevokingId(requestId);
+    setApproveError(null);
+    try {
+      const response = await fetch(`/api/write-access-requests/${requestId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "revoked" })
+      });
+
+      if (!response.ok) {
+        throw new Error("Revoke failed.");
+      }
+
+      const updated = (await response.json()) as RequestItem;
+      setRequests((prev) =>
+        prev.map((request) =>
+          request.id === updated.id ? { ...request, status: updated.status } : request
+        )
+      );
+      setWriteAccess(false);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Revoke failed.";
+      setApproveError(message);
+    } finally {
+      setRevokingId(null);
     }
   };
 
@@ -53,7 +88,9 @@ export function TicketGovernance({
               Jira is read-only by default. Writes require approval.
             </p>
           </div>
-          <Badge tone="amber">Read-only</Badge>
+          <Badge tone={writeAccess ? "emerald" : "amber"}>
+            {writeAccess ? "Write enabled" : "Read-only"}
+          </Badge>
         </div>
         <div className="mt-4 flex flex-wrap items-center gap-3">
           <Badge tone="amber">Approval required for writes</Badge>
@@ -81,6 +118,8 @@ export function TicketGovernance({
         approvingId={approvingId}
         approveError={approveError}
         onApprove={handleApprove}
+        onRevoke={handleRevoke}
+        revokingId={revokingId}
       />
     </div>
   );

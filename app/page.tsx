@@ -4,6 +4,7 @@ import { authOptions } from "../lib/auth";
 import { prisma } from "../lib/prisma";
 import { Badge } from "../components/Badge";
 import { PolicyPanel } from "../components/PolicyPanel";
+import { PriorityIndicator } from "../components/PriorityIndicator";
 
 export default async function HomePage() {
   const session = await getServerSession(authOptions);
@@ -12,11 +13,7 @@ export default async function HomePage() {
     return (
       <div className="grid gap-10">
         <section className="rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-8 shadow-sm">
-          <div className="flex flex-wrap items-center gap-3">
-            <Badge tone="amber">Read-only</Badge>
-            <Badge tone="slate">Approval required for writes</Badge>
-          </div>
-          <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-slate-400">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
             Demo workspace
           </p>
           <h1 className="mt-2 text-3xl font-semibold text-slate-100">
@@ -68,22 +65,23 @@ export default async function HomePage() {
             </div>
             <Badge tone="slate">Read-only mode</Badge>
           </div>
-          <PolicyPanel />
+          <PolicyPanel showHeader={false} />
         </section>
       </div>
     );
   }
 
   const tickets = await prisma.ticket.findMany({ orderBy: { key: "asc" } });
+  const approvedRequest = await prisma.writeAccessRequest.findFirst({
+    where: { userId: session.user.id, status: "approved" },
+    select: { id: true }
+  });
+  const hasWriteAccess = Boolean(approvedRequest);
 
   return (
     <div className="grid gap-10">
       <section className="rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-8 shadow-sm">
-        <div className="flex flex-wrap items-center gap-3">
-          <Badge tone="amber">Read-only</Badge>
-          <Badge tone="slate">Approval required for writes</Badge>
-        </div>
-        <div className="mt-6">
+        <div>
           <h1 className="text-3xl font-semibold text-slate-100">
             Jira tickets with Codex-ready context
           </h1>
@@ -122,7 +120,6 @@ export default async function HomePage() {
                 </h2>
               </div>
             </div>
-            <Badge tone="slate">Read-only by default</Badge>
           </div>
           <div className="grid gap-4">
             {tickets.map((ticket) => (
@@ -144,7 +141,7 @@ export default async function HomePage() {
                     <p className="text-sm font-semibold text-slate-200">
                       {ticket.status}
                     </p>
-                    <p className="text-xs text-slate-400">{ticket.priority}</p>
+                    <PriorityIndicator priority={ticket.priority} />
                   </div>
                 </div>
                 <p className="mt-3 text-sm text-slate-300">
@@ -185,7 +182,9 @@ export default async function HomePage() {
                 </h2>
               </div>
             </div>
-            <Badge tone="slate">Read-only mode</Badge>
+            <Badge tone={hasWriteAccess ? "emerald" : "slate"}>
+              {hasWriteAccess ? "Write enabled" : "Read-only mode"}
+            </Badge>
           </summary>
           <div className="mt-4">
             <PolicyPanel showHeader={false} />

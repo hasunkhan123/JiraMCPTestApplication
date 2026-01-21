@@ -1,6 +1,14 @@
 import { Badge } from "./Badge";
 
-export function PolicyPanel({ showHeader = true }: { showHeader?: boolean }) {
+export function PolicyPanel({
+  showHeader = true,
+  accessLabel = "Read-only",
+  accessTone = "slate"
+}: {
+  showHeader?: boolean;
+  accessLabel?: string;
+  accessTone?: "slate" | "amber" | "emerald";
+}) {
   return (
     <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-sm">
       {showHeader ? (
@@ -8,7 +16,7 @@ export function PolicyPanel({ showHeader = true }: { showHeader?: boolean }) {
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
             Team Codex Policy
           </h3>
-          <Badge tone="slate">Read-only</Badge>
+          <Badge tone={accessTone}>{accessLabel}</Badge>
         </div>
       ) : null}
       <p

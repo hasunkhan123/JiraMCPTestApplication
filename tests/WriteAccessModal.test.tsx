@@ -14,7 +14,7 @@ describe("WriteAccessModal", () => {
         id: "req_1",
         ticketKey: "ECOM-101",
         reason: "Need to update ticket fields",
-        scope: "Update summary",
+        scope: "rename-ticket",
         approvalPolicy: "Lead approval",
         notes: "",
         status: "pending",
@@ -34,9 +34,9 @@ describe("WriteAccessModal", () => {
       await screen.findByLabelText(/reason/i),
       "Need to update ticket fields"
     );
-    await user.type(
+    await user.selectOptions(
       screen.getByLabelText(/scope/i),
-      "Update summary"
+      "rename-ticket"
     );
     await user.type(
       screen.getByLabelText(/approval policy/i),

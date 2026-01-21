@@ -6,6 +6,7 @@ import { prisma } from "../../../lib/prisma";
 import { Badge } from "../../../components/Badge";
 import { CodexPanel } from "../../../components/CodexPanel";
 import { PolicyPanel } from "../../../components/PolicyPanel";
+import { PriorityIndicator } from "../../../components/PriorityIndicator";
 import { TicketTitleEditor } from "../../../components/TicketTitleEditor";
 import { TicketGovernance } from "../../../components/TicketGovernance";
 
@@ -57,6 +58,7 @@ export default async function TicketDetailPage({
   });
 
   const approvedScopes = new Set(approvedRequests.map((item) => item.scope));
+  const hasWriteAccess = approvedScopes.size > 0;
   const canRenameTicket =
     approvedScopes.has("rename-ticket") ||
     approvedScopes.has("rename-and-apply");
@@ -109,7 +111,9 @@ export default async function TicketDetailPage({
           </div>
           <div className="text-right">
             <Badge tone="emerald">{ticket.status}</Badge>
-            <p className="mt-2 text-xs text-slate-400">{ticket.priority}</p>
+            <div className="mt-2 flex justify-end">
+              <PriorityIndicator priority={ticket.priority} />
+            </div>
           </div>
         </div>
       </section>
@@ -121,11 +125,12 @@ export default async function TicketDetailPage({
             initialArtifact={initialArtifact}
             canApplyCodex={canApplyCodex}
           />
-          <PolicyPanel />
+          <PolicyPanel showHeader={false} />
         </div>
         <TicketGovernance
           ticketKey={ticket.key}
           initialRequests={requestItems}
+          hasWriteAccess={hasWriteAccess}
         />
       </div>
     </div>
