@@ -25,6 +25,7 @@ Hackathon demo app showing Jira ticket workflows with Codex summaries and govern
    # Optional for live mode
    CODEX_API_KEY=""
    ```
+   Or copy `.env.example` and adjust values as needed.
 3. Run migrations and seed data
    ```bash
    npm run prisma:generate
@@ -49,3 +50,4 @@ Hackathon demo app showing Jira ticket workflows with Codex summaries and govern
 ## Notes
 - `CODEX_MODE=mock` returns deterministic Codex output for demos/tests.
 - `CODEX_MODE=live` requires `CODEX_API_KEY` and calls the Responses API.
+- `.env` files are intentionally gitignored; use `.env.example` as a template.
