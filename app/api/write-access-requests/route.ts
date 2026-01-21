@@ -69,31 +69,3 @@ export async function POST(request: Request) {
     createdAt: requestRecord.createdAt.toISOString()
   });
 }
-
-export async function GET(request: Request) {
-  const userId = await resolveUserId(request);
-
-  if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const { searchParams } = new URL(request.url);
-  const ticketKey = searchParams.get("ticketKey");
-
-  const requests = await prisma.writeAccessRequest.findMany({
-    where: ticketKey ? { ticket: { key: ticketKey } } : undefined,
-    orderBy: { createdAt: "desc" }
-  });
-
-  return NextResponse.json(
-    requests.map((requestItem) => ({
-      id: requestItem.id,
-      reason: requestItem.reason,
-      scope: requestItem.scope,
-      approvalPolicy: requestItem.approvalPolicy,
-      notes: requestItem.notes,
-      status: requestItem.status,
-      createdAt: requestItem.createdAt.toISOString()
-    }))
-  );
-}
