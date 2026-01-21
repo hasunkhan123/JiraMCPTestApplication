@@ -42,7 +42,7 @@ export default async function HomePage() {
             </div>
             <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
               <p className="text-sm font-semibold text-slate-100">
-                3. Request writes
+                3. Governed Write Access
               </p>
               <p className="mt-2 text-xs text-slate-400">
                 Submit access requests with explicit scope and policy.

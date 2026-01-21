@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { jiraMockTickets } from "../lib/jiraMock.ts";
+import { jiraMockTickets } from "../lib/jiraMock";
 
 const prisma = new PrismaClient();
 
