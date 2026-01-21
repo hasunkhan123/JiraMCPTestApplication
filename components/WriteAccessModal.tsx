@@ -29,14 +29,20 @@ export function WriteAccessModal({
   const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({
     reason: "",
-    scope: "",
+    scope: "rename-ticket",
     approvalPolicy: "",
     notes: "",
     confirm: false
   });
 
   const resetForm = () => {
-    setForm({ reason: "", scope: "", approvalPolicy: "", notes: "", confirm: false });
+    setForm({
+      reason: "",
+      scope: "rename-ticket",
+      approvalPolicy: "",
+      notes: "",
+      confirm: false
+    });
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -114,15 +120,25 @@ export function WriteAccessModal({
               </label>
               <label className="block text-sm font-medium text-slate-200">
                 Scope
-                <input
+                <select
                   required
-                  className="mt-2 w-full rounded-xl border border-slate-800 bg-slate-950 p-3 text-sm text-slate-100 placeholder:text-slate-600"
+                  className="mt-2 w-full rounded-xl border border-slate-800 bg-slate-950 p-3 text-sm text-slate-100"
                   value={form.scope}
                   onChange={(event) =>
                     setForm((prev) => ({ ...prev, scope: event.target.value }))
                   }
-                  placeholder="e.g., Update ticket fields only"
-                />
+                >
+                  <option value="rename-ticket">Rename ticket title</option>
+                  <option value="apply-codex">
+                    Apply Codex summary and checklist
+                  </option>
+                  <option value="rename-and-apply">
+                    Rename ticket + apply Codex output
+                  </option>
+                </select>
+                <p className="mt-2 text-xs text-slate-400">
+                  Pick the minimal write access needed for this change.
+                </p>
               </label>
               <label className="block text-sm font-medium text-slate-200">
                 Approval policy

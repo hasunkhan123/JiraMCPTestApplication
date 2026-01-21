@@ -6,6 +6,7 @@ import { prisma } from "../../../lib/prisma";
 import { Badge } from "../../../components/Badge";
 import { CodexPanel } from "../../../components/CodexPanel";
 import { PolicyPanel } from "../../../components/PolicyPanel";
+import { TicketTitleEditor } from "../../../components/TicketTitleEditor";
 import { TicketGovernance } from "../../../components/TicketGovernance";
 
 export default async function TicketDetailPage({
@@ -46,6 +47,23 @@ export default async function TicketDetailPage({
     orderBy: { createdAt: "desc" }
   });
 
+  const approvedRequests = await prisma.writeAccessRequest.findMany({
+    where: {
+      ticketId: ticket.id,
+      userId: session.user.id,
+      status: "approved"
+    },
+    select: { scope: true }
+  });
+
+  const approvedScopes = new Set(approvedRequests.map((item) => item.scope));
+  const canRenameTicket =
+    approvedScopes.has("rename-ticket") ||
+    approvedScopes.has("rename-and-apply");
+  const canApplyCodex =
+    approvedScopes.has("apply-codex") ||
+    approvedScopes.has("rename-and-apply");
+
   const requestItems = requests.map((request) => ({
     id: request.id,
     reason: request.reason,
@@ -80,9 +98,11 @@ export default async function TicketDetailPage({
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
               {ticket.key}
             </p>
-            <h1 className="mt-2 text-2xl font-semibold text-slate-100">
-              {ticket.title}
-            </h1>
+            <TicketTitleEditor
+              ticketKey={ticket.key}
+              title={ticket.title}
+              canRename={canRenameTicket}
+            />
             <p className="mt-3 text-sm text-slate-300">
               {ticket.description}
             </p>
@@ -96,7 +116,11 @@ export default async function TicketDetailPage({
 
       <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
         <div className="space-y-6">
-          <CodexPanel ticketKey={ticket.key} initialArtifact={initialArtifact} />
+          <CodexPanel
+            ticketKey={ticket.key}
+            initialArtifact={initialArtifact}
+            canApplyCodex={canApplyCodex}
+          />
           <PolicyPanel />
         </div>
         <TicketGovernance

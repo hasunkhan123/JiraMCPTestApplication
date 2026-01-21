@@ -13,6 +13,35 @@ export function TicketGovernance({
   initialRequests: RequestItem[];
 }) {
   const [requests, setRequests] = useState<RequestItem[]>(initialRequests);
+  const [approvingId, setApprovingId] = useState<string | null>(null);
+  const [approveError, setApproveError] = useState<string | null>(null);
+
+  const handleApprove = async (requestId: string) => {
+    setApprovingId(requestId);
+    setApproveError(null);
+    try {
+      const response = await fetch(`/api/write-access-requests/${requestId}`, {
+        method: "PATCH"
+      });
+
+      if (!response.ok) {
+        throw new Error("Approval failed.");
+      }
+
+      const updated = (await response.json()) as RequestItem;
+      setRequests((prev) =>
+        prev.map((request) =>
+          request.id === updated.id ? { ...request, status: updated.status } : request
+        )
+      );
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Approval failed.";
+      setApproveError(message);
+    } finally {
+      setApprovingId(null);
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -47,7 +76,12 @@ export function TicketGovernance({
           />
         </div>
       </div>
-      <RequestsList requests={requests} />
+      <RequestsList
+        requests={requests}
+        approvingId={approvingId}
+        approveError={approveError}
+        onApprove={handleApprove}
+      />
     </div>
   );
 }
