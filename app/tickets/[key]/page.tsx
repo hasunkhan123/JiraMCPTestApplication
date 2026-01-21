@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 import { authOptions } from "../../../lib/auth";
@@ -67,7 +68,14 @@ export default async function TicketDetailPage({
   return (
     <div className="grid gap-8">
       <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <div className="flex items-start justify-between">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-900"
+        >
+          <span aria-hidden="true">←</span>
+          Back to tickets
+        </Link>
+        <div className="mt-4 flex items-start justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
               {ticket.key}
